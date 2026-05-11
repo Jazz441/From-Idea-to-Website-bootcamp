@@ -1,0 +1,61 @@
+<!DECOTYPE html>
+<html lang="en">    
+<head>
+    <meta charset="UTF-8">
+    <title>Team Page</title>
+    <link rel="stylesheet" href="styles/stylesheet.css"> 
+</head>
+
+<body>
+    <h1>This page is about our team</h1>
+    <h2>Team Members</h2>
+    <table id="csvTable" alt="members information"></table>
+    <br>
+    <h2>Supervisor: Dr.X </h2>
+    <p>This is where the supervisor's background information will be displayed.</p>
+
+    <!--     might add agreement document here later + Change DB and fix misspellings of intrest haha-->
+    <br>
+    <a class="back" href="index.html">Return to the Main Page</a>
+
+</body>
+
+<footer>
+    <hr>
+    <p>Author: Aljazy Alatal</p>
+    <p>Email: <a class="mail" href="mailto:aljazyalatal@gmail.com">aljazyalatal@gmail.com</a></p>
+</footer>
+
+<script>
+fetch('DB/Members.csv')
+  .then(response => response.text())
+    .then(data => {
+
+        const rows = data.trim().split('\n');
+        const table = document.getElementById('csvTable');
+
+        rows.forEach((row, index) => {
+
+            if (row.trim() === '') return;
+            const cols = row.split(',');
+            const tr = document.createElement('tr');
+            cols.forEach((col, colIndex) => {
+                const cell = document.createElement(index === 0 ? 'th' : 'td');
+
+                // Make Email column clickable
+                if (index !== 0 && colIndex === 1) {
+                    const link = document.createElement('a');
+                    link.href = `mailto:${col}`;
+                    link.textContent = col;
+                    cell.appendChild(link);
+                } else {
+                    cell.textContent = col;
+                }
+                tr.appendChild(cell);
+            });
+            table.appendChild(tr);
+        });
+    });
+</script>
+
+</html>

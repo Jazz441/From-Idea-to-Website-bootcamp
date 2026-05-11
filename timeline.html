@@ -1,0 +1,53 @@
+<!DECOTYPE html>
+<html lang="en">    
+<head>
+    <meta charset="UTF-8">
+    <title>Team Page</title>
+    <link rel="stylesheet" href="styles/stylesheet.css"> 
+</head>
+
+<body>
+    <h1>This page have the project timeline from newest to oldest</h1>
+
+    <p>This is where the project timeline and our progress will be displayed.</p>
+    <table id="timelineTable" alt="timeline information"></table>
+    
+    <br>
+    <a class="back"href="index.html">Return to the Main Page</a>
+</body>
+
+<footer>
+    <hr>
+    <p>Author: Aljazy Alatal</p>
+    <p>Email: <a class="mail" href="mailto:aljazyalatal@gmail.com">aljazyalatal@gmail.com</a></p>
+</footer>
+
+<script>
+fetch('DB/Timeline.csv')
+    .then(response => response.text())
+    .then(data => {
+        const rows = data.trim().split('\n').map(r => r.split(','));
+
+        const headers = rows[0];
+        let content = rows.slice(1);
+
+        // to sort from new to old
+        const dateColumnIndex = 0;
+        content.sort((a, b) => new Date(b[dateColumnIndex]) - new Date(a[dateColumnIndex]));
+
+        const table = document.getElementById('timelineTable');
+
+        // Create header row
+        let headerRow = '<tr>' + headers.map(h => `<th>${h}</th>`).join('') + '</tr>';
+        
+        // Create data rows
+        let dataRows = content.map(row => 
+            '<tr>' + row.map(cell => `<td>${cell}</td>`).join('') + '</tr>'
+        ).join('');
+
+        table.innerHTML = headerRow + dataRows;
+    });
+</script>
+
+
+</html>
